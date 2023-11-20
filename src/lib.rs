@@ -6,12 +6,12 @@ pub fn mean_f(data: &[f64]) -> f64 {
     sum / (data.len() as f64)
 }
 
-pub fn mean_i(data: &[i64]) -> i64 {
+pub fn mean_i(data: &[i64]) -> f64 {
     let mut sum = 0;
     for x in data {
         sum += x;
     }
-    sum / (data.len() as i64)
+    (sum / (data.len() as i64)) as f64
 }
 
 #[cfg(test)]
