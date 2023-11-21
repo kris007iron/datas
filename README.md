@@ -43,7 +43,7 @@ Datas is a Rust library designed to provide a comprehensive set of tools for dat
 
      ```toml
      [dependencies]
-     datas = "0.1.2"
+     datas = "0.1.3"
      ```
 
 2. **Usage:**
