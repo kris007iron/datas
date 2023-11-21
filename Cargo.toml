@@ -1,6 +1,6 @@
 [package]
 name = "datas"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2021"
 authors = ["Krzysztof Mrugala <kris007.iron@gmail.com>"]
 readme = "README.md"
