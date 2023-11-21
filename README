@@ -1,12 +1,8 @@
-Certainly! Below is a simplified README template for your data analysis library. You can customize it further based on additional features and specifics of your library.
-
----
-
 # Your Data Analysis Library Name
 
 ## Overview
 
-[Your Data Analysis Library Name] is a Rust library designed to provide a comprehensive set of tools for data analysts. Whether you're working with large datasets or conducting complex analyses, this library aims to simplify the process and empower analysts with efficient and reliable functionalities.
+Datas is a Rust library designed to provide a comprehensive set of tools for data analysts. Whether you're working with large datasets or conducting complex analyses, this library aims to simplify the process and empower analysts with efficient and reliable functionalities.
 
 ## Features
 
@@ -43,18 +39,18 @@ Certainly! Below is a simplified README template for your data analysis library.
 ## Getting Started
 
 1. **Installation:**
-   - Add [Your Data Analysis Library Name] to your `Cargo.toml` file:
+   - Add Datas to your `Cargo.toml` file:
 
      ```toml
      [dependencies]
-     your_library_name = "0.1.0"
+     datas = "0.1.2"
      ```
 
 2. **Usage:**
    - Import the library into your Rust project:
 
      ```rust
-     use your_library_name::*;
+     use datas::*;          
      ```
 
    - Start using the powerful data analysis features in your project.
@@ -63,6 +59,11 @@ Certainly! Below is a simplified README template for your data analysis library.
 
 ```rust
 // Example code showcasing how to use key features
+fn main(){
+       let data: [f64; 4] = [1.0, 2.0, 3.0, 4.0];
+       let mean = datas::mean_f(&data);
+       print!("Mean: {}", mean);
+     }
 // ...
 
 ```
@@ -73,8 +74,4 @@ Contributions are welcome! If you have ideas for improvements, new features, or 
 
 ## License
 
-This project is licensed under the [Your License Name] - see the [MIT](LICENSE) file for details.
-
----
-
-Remember to replace placeholders like `[Your Data Analysis Library Name]`, `your_library_name`, `[Your License Name]`, and provide the appropriate license file. Additionally, you can expand the sections based on the specific details of your library.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
