@@ -1,4 +1,5 @@
-# Datas
+# Datas  ![Build Status]
+[Build Status]: https://img.shields.io/github/actions/workflow/status/kris007iron/datas/rust.yml?branch=master
 
 ## Overview
 
