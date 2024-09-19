@@ -1,8 +1,8 @@
-# Your Data Analysis Library Name
+# Datas
 
 ## Overview
 
-Datas is a Rust library designed to provide a comprehensive set of tools for data analysts. Whether you're working with large datasets or conducting complex analyses, this library aims to simplify the process and empower analysts with efficient and reliable functionalities.
+Datas is a Rust library designed to provide a comprehensive set of tools for data analysts. Whether working with large datasets or conducting complex analyses, this library aims to simplify the process and empower analysts with efficient and reliable functionalities.
 
 ## Features
 
@@ -16,7 +16,7 @@ Datas is a Rust library designed to provide a comprehensive set of tools for dat
   - Perform basic arithmetic operations element-wise on arrays.
 
 - **Descriptive Statistics:**
-  - Calculate common descriptive statistics like mean, median, variance, and more.
+  - Calculate common descriptive statistics like mean, median, variance, etc.
 
 - **Sorting:**
   - Sort data along specified axes.
