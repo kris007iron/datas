@@ -138,7 +138,7 @@ impl CalculusError {
 }
 
 #[cfg(test)]
-mod tests {    
+mod tests {
     use super::*;
 
     #[test]

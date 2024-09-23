@@ -1,10 +1,11 @@
 use std::ops::Mul;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum VectorError {
     DimensionMismatch,
 }
 
+#[derive(Debug, PartialEq)]
 pub struct Vector<T> {
     components: Vec<T>,
     dimensions: u64,
@@ -27,7 +28,7 @@ impl Vector<i64> {
             .sqrt()
     }
 
-    pub fn add(&mut self, vector: Vector<i64>) -> Result<(), VectorError> {
+    pub fn add(&mut self, vector: &Vector<i64>) -> Result<(), VectorError> {
         if self.dimensions == vector.dimensions {
             for (index, component) in self.components.iter_mut().enumerate() {
                 *component += vector.components[index];
@@ -79,7 +80,7 @@ impl Vector<f64> {
             .sqrt()
     }
 
-    pub fn add_i(&mut self, vector: Vector<i64>) -> Result<(), VectorError> {
+    pub fn add_i(&mut self, vector: &Vector<i64>) -> Result<(), VectorError> {
         if self.dimensions == vector.dimensions {
             for (index, component) in self.components.iter_mut().enumerate() {
                 *component += vector.components[index] as f64;
@@ -90,7 +91,7 @@ impl Vector<f64> {
         }
     }
 
-    pub fn add_f(&mut self, vector: Vector<f64>) -> Result<(), VectorError> {
+    pub fn add_f(&mut self, vector: &Vector<f64>) -> Result<(), VectorError> {
         if self.dimensions == vector.dimensions {
             for (index, component) in self.components.iter_mut().enumerate() {
                 *component += vector.components[index];
@@ -145,5 +146,67 @@ impl Mul<i64> for Vector<f64> {
             .iter_mut()
             .for_each(|component| *component *= scalar as f64);
         self
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn new_ivec_creation_test() {
+        let i_vector: Vector<i64> = Vector::<i64>::new(vec![1, 2, 3]);
+        assert_eq!(
+            i_vector,
+            Vector::<i64> {
+                components: vec![1, 2, 3],
+                dimensions: 3
+            }
+        )
+    }
+
+    #[test]
+    fn new_fvec_creation_test() {
+        let f_vector: Vector<f64> = Vector::<f64>::new(vec![1.0, 2.2, 3.2]);
+        assert_eq!(
+            f_vector,
+            Vector::<f64> {
+                components: vec![1.0, 2.2, 3.2],
+                dimensions: 3
+            }
+        )
+    }
+
+    #[test]
+    fn ivec_magnitude() {
+        let i_vector = Vector::<i64>::new(vec![3, 4]);
+        assert_eq!(i_vector.magnitude(), 5.0);
+    }
+
+    #[test]
+    fn fvec_magnitude() {
+        let f_vector: Vector<f64> = Vector::<f64>::new(vec![6.0, 8.0]);
+        assert_eq!(f_vector.magnitude(), 10.0);
+    }
+
+    #[test]
+    fn ivec_addition() {
+        let mut i_vector = Vector::<i64>::new(vec![3, 4]);
+        let i_vector_2 = Vector::<i64>::new(vec![3, 4]);
+        let _ = i_vector.add(&i_vector_2).expect("mismatched dimensions");
+        assert_eq!(
+            i_vector,
+            Vector::<i64> {
+                components: vec![6, 8],
+                dimensions: 2
+            }
+        )
+    }
+
+    #[test]
+    fn ivec_addition_failure() {
+        let mut i_vector = Vector::<i64>::new(vec![3, 4]);
+        let i_vector_2 = Vector::<i64>::new(vec![3, 4, 5]);
+        let res = i_vector.add(&i_vector_2).err();
+        assert_eq!(res, Some(VectorError::DimensionMismatch));
     }
 }
