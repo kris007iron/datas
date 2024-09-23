@@ -1,5 +1,8 @@
 use std::collections::HashMap;
 use std::hash::Hash;
+
+
+pub mod matrix;
 pub struct Mean;
 
 impl Mean {
