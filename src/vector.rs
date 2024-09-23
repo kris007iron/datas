@@ -1,4 +1,4 @@
-use std::vec;
+use std::ops::Mul;
 
 #[derive(Debug)]
 pub enum VectorError {
@@ -9,6 +9,7 @@ pub struct Vector<T> {
     components: Vec<T>,
     dimensions: u64,
 }
+
 impl Vector<i64> {
     pub fn new(components: Vec<i64>) -> Self {
         let dimensions = components.len() as u64;
@@ -40,13 +41,23 @@ impl Vector<i64> {
     pub fn dot_product(&self, vector: &Vector<i64>) -> Result<i64, VectorError> {
         if self.dimensions != vector.dimensions {
             return Err(VectorError::DimensionMismatch);
-        }
-
+        }        
         Ok(self
             .components
             .iter()
             .zip(&vector.components)
             .map(|(a, b)| a * b)
             .sum())
+    }
+}
+
+impl Mul<i64> for Vector<i64> {
+    type Output = Vector<i64>;
+
+    fn mul(mut self, scalar: i64) -> Vector<i64> {
+        self.components
+            .iter_mut()
+            .for_each(|component| *component *= scalar);
+        self
     }
 }
