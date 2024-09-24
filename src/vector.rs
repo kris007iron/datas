@@ -203,10 +203,152 @@ mod tests {
     }
 
     #[test]
+    fn fvec_and_fvec_addition() {
+        let mut f_vector = Vector::<f64>::new(vec![3.5, 4.2]);
+        let f_vector_2 = Vector::<f64>::new(vec![3.2, 4.1]);
+        let _ = f_vector.add_f(&f_vector_2).expect("mismatched dimensions");
+        assert_eq!(
+            f_vector,
+            Vector::<f64> {
+                components: vec![6.7, 8.3],
+                dimensions: 2
+            }
+        )
+    }
+
+    #[test]
+    fn fvec_and_ivec_addition() {
+        let mut f_vector = Vector::<f64>::new(vec![3.5, 4.2]);
+        let i_vector = Vector::<i64>::new(vec![3, 4]);
+        let _ = f_vector.add_i(&i_vector).expect("mismatched dimensions");
+        assert_eq!(
+            f_vector,
+            Vector::<f64> {
+                components: vec![6.5, 8.2],
+                dimensions: 2
+            }
+        )
+    }
+
+    #[test]
     fn ivec_addition_failure() {
         let mut i_vector = Vector::<i64>::new(vec![3, 4]);
         let i_vector_2 = Vector::<i64>::new(vec![3, 4, 5]);
         let res = i_vector.add(&i_vector_2).err();
         assert_eq!(res, Some(VectorError::DimensionMismatch));
+    }
+
+    #[test]
+    fn fvec_and_fvec_addition_failure() {
+        let mut f_vector = Vector::<f64>::new(vec![3.3, 4.1]);
+        let f_vector_2 = Vector::<f64>::new(vec![3.2, 4.34, 5.2]);
+        let res = f_vector.add_f(&f_vector_2).err();
+        assert_eq!(res, Some(VectorError::DimensionMismatch));
+    }
+
+    #[test]
+    fn fvec_and_ivec_addition_failure() {
+        let mut f_vector = Vector::<f64>::new(vec![3.3, 4.1]);
+        let i_vector = Vector::<i64>::new(vec![3, 4, 52]);
+        let res = f_vector.add_i(&i_vector).err();
+        assert_eq!(res, Some(VectorError::DimensionMismatch));
+    }
+
+    #[test]
+    fn test_dot_product_i_success() {
+        // Create two vectors of integers using the updated generic `new` method
+        let vec1 = Vector::<i64>::new(vec![1, 2, 3]);
+        let vec2 = Vector::<i64>::new(vec![4, 5, 6]);
+
+        // Expected dot product = 1*4 + 2*5 + 3*6 = 4 + 10 + 18 = 32.0
+        let result = vec1.dot_product(&vec2);
+        assert_eq!(result, Ok(32));
+    }
+
+    #[test]
+    fn test_dot_product_i_dimension_mismatch() {
+        // Create two vectors with different dimensions
+        let vec1 = Vector::<i64>::new(vec![1, 2, 3]);
+        let vec2 = Vector::<i64>::new(vec![4, 5]); // Mismatched dimension
+
+        // Expect a DimensionMismatch error
+        let result = vec1.dot_product(&vec2);
+        assert_eq!(result, Err(VectorError::DimensionMismatch));
+    }
+
+    #[test]
+    fn test_dot_product_f_success() {
+        // Create two vectors of floating-point numbers using the updated generic `new` method
+        let vec1 = Vector::<f64>::new(vec![1.0, 2.0, 3.0]);
+        let vec2 = Vector::<f64>::new(vec![4.0, 5.0, 6.0]);
+
+        // Expected dot product = 1.0*4.0 + 2.0*5.0 + 3.0*6.0 = 32.0
+        let result = vec1.dot_product_f(&vec2);
+        assert_eq!(result, Ok(32.0));
+    }
+
+    #[test]
+    fn test_dot_product_f_and_i_success() {
+        // Create two vectors of floating-point numbers using the updated generic `new` method
+        let vec1 = Vector::<f64>::new(vec![1.0, 2.0, 3.0]);
+        let vec2 = Vector::<i64>::new(vec![4, 5, 6]);
+
+        // Expected dot product = 1.0*4.0 + 2.0*5.0 + 3.0*6.0 = 32.0
+        let result = vec1.dot_product_i(&vec2);
+        assert_eq!(result, Ok(32.0));
+    }
+
+    #[test]
+    fn test_dot_product_f_dimension_mismatch() {
+        // Create two vectors with different dimensions
+        let vec1 = Vector::<f64>::new(vec![1.0, 2.0, 3.0]);
+        let vec2 = Vector::<f64>::new(vec![4.0, 5.0]); // Mismatched dimension
+
+        // Expect a DimensionMismatch error
+        let result = vec1.dot_product_f(&vec2);
+        assert_eq!(result, Err(VectorError::DimensionMismatch));
+    }
+
+    #[test]
+    fn test_dot_product_f_and_i_dimension_mismatch() {
+        // Create two vectors with different dimensions
+        let vec1 = Vector::<f64>::new(vec![1.0, 2.0, 3.0]);
+        let vec2 = Vector::<i64>::new(vec![40, 50]); // Mismatched dimension
+
+        // Expect a DimensionMismatch error
+        let result = vec1.dot_product_i(&vec2);
+        assert_eq!(result, Err(VectorError::DimensionMismatch));
+    }
+
+    #[test]
+    fn test_dot_product_i_empty_vectors() {
+        // Test with empty integer vectors
+        let vec1 = Vector::<i64>::new(vec![]);
+        let vec2 = Vector::<i64>::new(vec![]);
+
+        // Expected dot product for empty vectors should be 0.0
+        let result = vec1.dot_product(&vec2);
+        assert_eq!(result, Ok(0));
+    }
+
+    #[test]
+    fn test_dot_product_f_empty_vectors() {
+        // Test with empty floating-point vectors
+        let vec1 = Vector::<f64>::new(vec![]);
+        let vec2 = Vector::<f64>::new(vec![]);
+
+        // Expected dot product for empty vectors should be 0.0
+        let result = vec1.dot_product_f(&vec2);
+        assert_eq!(result, Ok(0.0));
+    }
+    #[test]
+    fn test_dot_product_f_and_i_empty_vectors() {
+        // Test with empty floating-point vectors
+        let vec1 = Vector::<f64>::new(vec![]);
+        let vec2 = Vector::<i64>::new(vec![]);
+
+        // Expected dot product for empty vectors should be 0.0
+        let result = vec1.dot_product_i(&vec2);
+        assert_eq!(result, Ok(0.0));
     }
 }
