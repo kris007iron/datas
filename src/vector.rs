@@ -1,17 +1,25 @@
 use std::ops::Mul;
 
+/// This enum represents possible errors that can happen during usage of the library.
 #[derive(Debug, PartialEq)]
 pub enum VectorError {
     DimensionMismatch,
 }
 
+/// Vector struct with private fields
 #[derive(Debug, PartialEq)]
 pub struct Vector<T> {
+    /// Stores information about components of Vector inside well Vector
     components: Vec<T>,
     dimensions: u64,
 }
 
 impl Vector<i64> {
+    /// Public constructor of Vector
+    /// ```
+    /// use datas::vector::Vector;
+    /// let i_vector = Vector::<i64>::new(vec![3, 4]);
+    /// ```
     pub fn new(components: Vec<i64>) -> Self {
         let dimensions = components.len() as u64;
         Self {
@@ -28,6 +36,7 @@ impl Vector<i64> {
             .sqrt()
     }
 
+    /// Addition method that mutates vector similar to AddAssign trait
     pub fn add(&mut self, vector: &Vector<i64>) -> Result<(), VectorError> {
         if self.dimensions == vector.dimensions {
             for (index, component) in self.components.iter_mut().enumerate() {
