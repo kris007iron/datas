@@ -1,6 +1,10 @@
+use core::num;
+use std::result;
+
 #[derive(Debug, PartialEq)]
 pub enum MatrixError {
     InconsistentColumnSizes,
+    MultiplicationDimensionMismatch,
     DimensionMismatch,
 }
 
@@ -32,14 +36,34 @@ impl Matrix<i64> {
         if self.cols != matrix.cols || self.rows != matrix.rows {
             return Err(MatrixError::DimensionMismatch);
         }
-        let self_data_iterator = self.data.iter_mut();
-        let matrix_data_iterator = matrix.data.iter();
-        for (self_row, matrix_row) in self_data_iterator.zip(matrix_data_iterator) {
-            for (self_el, matrix_el) in self_row.iter_mut().zip(matrix_row) {
-                *self_el += matrix_el;
-            }
-        }
+
+        self.data
+            .iter_mut()
+            .zip(&matrix.data)
+            .for_each(|(self_row, matrix_row)| {
+                self_row
+                    .iter_mut()
+                    .zip(matrix_row)
+                    .for_each(|(a, b)| *a += b)
+            });
         Ok(())
+    }
+    pub fn scalar_multiplication(&mut self, scalar: i64) {
+        self.data
+            .iter_mut()
+            .for_each(|col| col.iter_mut().for_each(|number| *number *= scalar));
+    }
+
+    pub fn matrix_multiplication(self, matrix: &Matrix<i64>) -> Result<Matrix<i64>, MatrixError> {
+        if self.cols != matrix.rows {
+            return Err(MatrixError::MultiplicationDimensionMismatch);
+        }
+        let data: Vec<Vec<i64>> = Vec::with_capacity(self.rows as usize);
+        //TODO: matrix multiplication logic
+        return Ok(match Matrix::<i64>::new(data) {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        });
     }
 }
 
