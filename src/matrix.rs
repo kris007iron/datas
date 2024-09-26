@@ -1,6 +1,3 @@
-use core::num;
-use std::result;
-
 #[derive(Debug, PartialEq)]
 pub enum MatrixError {
     InconsistentColumnSizes,
