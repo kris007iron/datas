@@ -3,6 +3,7 @@ pub enum MatrixError {
     InconsistentColumnSizes,
     MultiplicationDimensionMismatch,
     DimensionMismatch,
+    RowOutOfBound,
 }
 
 #[derive(Debug, PartialEq)]
@@ -36,6 +37,16 @@ impl Matrix<i64> {
             rows: self.rows.clone(),
             cols: self.cols.clone(),
         }
+    }
+
+    pub fn swap_row(&mut self, f_row: u64, s_row: u64) -> Result<(), MatrixError> {
+        if f_row >= self.rows || s_row >= self.rows {
+            return Err(MatrixError::RowOutOfBound);
+        }
+        let temp: Vec<i64> = self.data[f_row as usize].clone();
+        self.data[f_row as usize] = self.data[s_row as usize].clone();
+        self.data[s_row as usize] = temp;
+        Ok(())
     }
 
     pub fn add(&mut self, matrix: &Matrix<i64>) -> Result<(), MatrixError> {
@@ -116,6 +127,27 @@ mod tests {
 
         let matrix2 = matrix.clone();
 
+        assert_eq!(matrix, matrix2)
+    }
+
+    #[test]
+    fn imatrix_swap() {
+        let mut matrix = match Matrix::<i64>::new(vec![vec![1, 2, 3], vec![3, 2, 1], vec![1, 2, 3]])
+        {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        };
+        let matrix2 = match Matrix::<i64>::new(vec![vec![1, 2, 3], vec![1, 2, 3], vec![3, 2, 1]]) {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        };
+
+        // 0 based indexing
+        match matrix.swap_row(1, 2) {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        };
+        println!("{:?}", matrix);
         assert_eq!(matrix, matrix2)
     }
 
