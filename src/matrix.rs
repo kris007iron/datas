@@ -64,20 +64,21 @@ impl Matrix<i64> {
         if self.cols != matrix.rows {
             return Err(MatrixError::MultiplicationDimensionMismatch);
         }
-        let mut data: Vec<Vec<i64>> = Vec::with_capacity(self.rows as usize);
-        for (index, row) in self.data.iter().enumerate() {
-            let mut new_row: Vec<i64> = Vec::with_capacity(matrix.rows as usize);
-            for column_index in 0..matrix.cols {
-                let mut matrix_column: Vec<i64> = Vec::with_capacity(matrix.cols as usize);
-                for (index_m, matrix_row) in matrix.data.iter().enumerate() {
-                    matrix_column.insert(index_m, matrix_row[column_index as usize].clone());
+
+        let mut data = Vec::with_capacity(self.rows as usize);
+
+        for row in &self.data {
+            let mut new_row = Vec::with_capacity(matrix.cols as usize);
+
+            for col_idx in 0..matrix.cols {
+                let mut sum = 0;
+                for (i, val) in row.iter().enumerate() {
+                    sum += val * matrix.data[i][col_idx as usize];
                 }
-                new_row.insert(
-                    column_index as usize,
-                    row.iter().zip(matrix_column).map(|(a, b)| a * b).sum(),
-                );
+                new_row.push(sum);
             }
-            data.insert(index, new_row);
+
+            data.push(new_row);
         }
         return Ok(match Matrix::<i64>::new(data) {
             Ok(m) => m,
