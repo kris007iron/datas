@@ -81,7 +81,7 @@ The library is fully tested with unit tests, covering:
 1. **Add to your Cargo.toml**:
 ```toml
 [dependencies]
-datas = "0.1.6"
+datas = "0.1.7"
 ```
 
 2. **Example Usage**:
