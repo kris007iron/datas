@@ -1,78 +1,103 @@
-# Datas  ![Build Status]
-[Build Status]: https://img.shields.io/github/actions/workflow/status/kris007iron/datas/rust.yml?branch=master
+# Statistical and Vector Operations Library
 
-## Overview
+This Rust library provides statistical operations and vector algebra functionalities, working with both `f64` and `i64` data types. It also includes methods for calculating common statistical measures (mean, median, mode, variance, standard deviation) and operations on vectors (addition, dot product, magnitude).
 
-Datas is a Rust library designed to provide a comprehensive set of tools for data analysts. Whether working with large datasets or conducting complex analyses, this library aims to simplify the process and empower analysts with efficient and reliable functionalities.
+## Modules
 
-## Features
+### 1. **Mean and Statistical Functions**
 
-- **Array Creation:**
-  - Easily create arrays from various data sources.
+The `Mean` struct includes statistical functions for both `f64` and `i64` types:
+- **Mean**:
+  - `mean_f`: Calculates the mean of a list of `f64` numbers.
+  - `mean_i`: Calculates the mean of a list of `i64` numbers.
+  
+- **Weighted Average**:
+  - `weighted_average_f`: Calculates the weighted average for `f64` numbers.
+  - `weighted_average_i`: Calculates the weighted average for `i64` numbers.
+  
+- **Median**:
+  - `median_f`: Finds the median for `f64` numbers.
+  - `median_i`: Finds the median for `i64` numbers.
+  
+- **Mode**:
+  - `mode`: Calculates the mode for any `Hash`, `Ord`, and `Clone` types.
+  - `mode_f64`: Specialized mode calculation for `f64` numbers.
 
-- **Indexing and Slicing:**
-  - Access specific elements or subsets of data within arrays.
+- **Variance and Standard Deviation**:
+  - `variance_f`: Computes variance for `f64` numbers.
+  - `variance_i`: Computes variance for `i64` numbers.
+  - `standard_deviation_f`: Computes standard deviation for `f64` numbers.
+  - `standard_deviation_i`: Computes standard deviation for `i64` numbers.
 
-- **Element-Wise Operations:**
-  - Perform basic arithmetic operations element-wise on arrays.
+### 2. **CalculusError for Error Calculation**
 
-- **Descriptive Statistics:**
-  - Calculate common descriptive statistics like mean, median, variance, etc.
+The `CalculusError` struct provides error calculation methods for both `f64` and `i64` values:
+- **Absolute Error**:
+  - `absolute_error_f`: Calculates the absolute error for `f64`.
+  - `absolute_error_i`: Calculates the absolute error for `i64`.
+  
+- **Relative Error**:
+  - `relative_error_f`: Calculates the relative error for `f64`.
+  - `relative_error_i`: Calculates the relative error for `i64`.
 
-- **Sorting:**
-  - Sort data along specified axes.
+### 3. **Vector Operations**
 
-- **Data Cleaning:**
-  - Handle missing values, remove duplicates, and filter outliers.
+The `Vector` struct is implemented for both `i64` and `f64` types and supports basic vector algebra:
+- **Creation**: 
+  - `new`: Initializes a new vector with `i64` or `f64` components.
+  
+- **Magnitude**:
+  - `magnitude`: Computes the magnitude (Euclidean length) of the vector.
 
-- **Reshaping:**
-  - Reshape arrays, transforming them from one dimension to another.
+- **Addition**:
+  - `add`: Adds two `i64` vectors (mutates the first vector).
+  - `add_f`: Adds two `f64` vectors (mutates the first vector).
+  - `add_i`: Adds an `i64` vector to an `f64` vector (mutates the `f64` vector).
 
-- **Concatenation and Splitting:**
-  - Concatenate arrays along specified axes and split arrays into smaller ones.
+- **Dot Product**:
+  - `dot_product`: Computes the dot product of two `i64` vectors.
+  - `dot_product_f`: Computes the dot product of two `f64` vectors.
+  - `dot_product_i`: Computes the dot product between an `f64` and `i64` vector.
 
-- **Linear Algebra Operations:**
-  - Perform basic linear algebra operations like matrix multiplication, determinant calculation, and eigenvalue computation.
+- **Scalar Multiplication**:
+  - Overloaded multiplication (`Mul` trait) for both `i64` and `f64` scalar multiplication.
 
-- **Random Number Generation:**
-  - Generate random numbers and arrays for simulations and statistical analyses.
+### 4. **VectorError for Error Handling**
 
-## Getting Started
+The `VectorError` enum handles errors during vector operations:
+- `DimensionMismatch`: Error raised when vectors of different dimensions are used in an operation.
 
-1. **Installation:**
-   - Add Datas to your `Cargo.toml` file:
+## Tests
 
-     ```toml
-     [dependencies]
-     datas = "0.1.5"
-     ```
+The library is fully tested with unit tests, covering:
+- Calculation of mean, weighted average, median, mode, variance, and standard deviation for both `f64` and `i64`.
+- Error handling for mismatched vector dimensions.
+- Vector addition, scalar multiplication, and dot product operations.
+- Magnitude computation for vectors.
 
-2. **Usage:**
-   - Import the library into your Rust project:
+## How to Use
 
-     ```rust
-     use datas::*;          
-     ```
-
-   - Start using the powerful data analysis features in your project.
-
-## Examples
-
-```rust
-// Example code showcasing how to use key features
-fn main(){
-       let data: [f64; 4] = [1.0, 2.0, 3.0, 4.0];
-       let mean = datas::mean_f(&data);
-       print!("Mean: {}", mean);
-     }
-// ...
-
+1. **Add to your Cargo.toml**:
+```toml
+[dependencies]
+datas = "0.1.6"
 ```
 
-## Contributing
+2. **Example Usage**:
+```rust
+use datas::Mean;
+use datas::vector::Vector;
 
-Contributions are welcome! If you have ideas for improvements, new features, or bug fixes, please open an issue or submit a pull request.
+// Statistical calculations
+let data = vec![1.0, 2.0, 3.0, 4.0];
+let mean = Mean::mean_f(&data);
+println!("Mean: {}", mean);
 
-## License
+// Vector operations
+let vec1 = Vector::<i64>::new(vec![1, 2, 3]);
+let vec2 = Vector::<i64>::new(vec![4, 5, 6]);
+let dot_product = vec1.dot_product(&vec2).unwrap();
+println!("Dot product: {}", dot_product);
+```
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This library offers efficient and flexible handling of common statistical and vector-based operations, making it a useful tool for mathematical computation in Rust projects. Still, it needs much work and improvements such as a more generic approach, so feel free to contribute.
