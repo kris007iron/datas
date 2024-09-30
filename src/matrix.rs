@@ -29,6 +29,15 @@ impl Matrix<i64> {
 
         Ok(Self { data, rows, cols })
     }
+
+    pub fn clone(&self) -> Matrix<i64> {
+        Matrix::<i64> {
+            data: self.data.clone(),
+            rows: self.rows.clone(),
+            cols: self.cols.clone(),
+        }
+    }
+
     pub fn add(&mut self, matrix: &Matrix<i64>) -> Result<(), MatrixError> {
         if self.cols != matrix.cols || self.rows != matrix.rows {
             return Err(MatrixError::DimensionMismatch);
@@ -55,8 +64,21 @@ impl Matrix<i64> {
         if self.cols != matrix.rows {
             return Err(MatrixError::MultiplicationDimensionMismatch);
         }
-        let data: Vec<Vec<i64>> = Vec::with_capacity(self.rows as usize);
-        //TODO: matrix multiplication logic
+        let mut data: Vec<Vec<i64>> = Vec::with_capacity(self.rows as usize);
+        for (index, row) in self.data.iter().enumerate() {
+            let mut new_row: Vec<i64> = Vec::with_capacity(matrix.rows as usize);
+            for column_index in 0..matrix.cols {
+                let mut matrix_column: Vec<i64> = Vec::with_capacity(matrix.cols as usize);
+                for (index_m, matrix_row) in matrix.data.iter().enumerate() {
+                    matrix_column.insert(index_m, matrix_row[column_index as usize].clone());
+                }
+                new_row.insert(
+                    column_index as usize,
+                    row.iter().zip(matrix_column).map(|(a, b)| a * b).sum(),
+                );
+            }
+            data.insert(index, new_row);
+        }
         return Ok(match Matrix::<i64>::new(data) {
             Ok(m) => m,
             Err(e) => panic!("{:?}", e),
@@ -82,5 +104,143 @@ mod tests {
         let res = matrix.add(&matrix2).err();
         println!("{:?}", matrix);
         assert_eq!(res, None);
+    }
+
+    #[test]
+    fn imatrix_cloning() {
+        let matrix = match Matrix::<i64>::new(vec![vec![1, 2, 3], vec![1, 2, 3], vec![1, 2, 3]]) {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        };
+
+        let matrix2 = matrix.clone();
+
+        assert_eq!(matrix, matrix2)
+    }
+
+    #[test]
+    fn imatrix_multiplication() {
+        let matrix = match Matrix::<i64>::new(vec![vec![1, 2], vec![3, 4]]) {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        };
+
+        let matrix2 = match Matrix::<i64>::new(vec![vec![2, 0], vec![1, 2]]) {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        };
+
+        let matrix3 = match Matrix::<i64>::new(vec![vec![4, 4], vec![10, 8]]) {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        };
+
+        assert_eq!(matrix.matrix_multiplication(&matrix2).unwrap(), matrix3)
+    }
+    // Test case for identity matrix
+    #[test]
+    fn imatrix_multiplication_identity() {
+        let matrix = match Matrix::<i64>::new(vec![vec![1, 2], vec![3, 4]]) {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        };
+
+        let identity_matrix = match Matrix::<i64>::new(vec![vec![1, 0], vec![0, 1]]) {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        };
+
+        let expected_result = matrix.clone(); // Multiplying by identity matrix should return the same matrix
+
+        assert_eq!(
+            matrix.matrix_multiplication(&identity_matrix).unwrap(),
+            expected_result
+        );
+    }
+
+    // Test case for multiplication by zero matrix
+    #[test]
+    fn imatrix_multiplication_zero_matrix() {
+        let matrix = match Matrix::<i64>::new(vec![vec![1, 2], vec![3, 4]]) {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        };
+
+        let zero_matrix = match Matrix::<i64>::new(vec![vec![0, 0], vec![0, 0]]) {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        };
+
+        let expected_result = match Matrix::<i64>::new(vec![vec![0, 0], vec![0, 0]]) {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        };
+
+        assert_eq!(
+            matrix.matrix_multiplication(&zero_matrix).unwrap(),
+            expected_result
+        );
+    }
+
+    // Test case for non-square matrices
+    #[test]
+    fn imatrix_multiplication_non_square() {
+        let matrix = match Matrix::<i64>::new(vec![vec![1, 2, 3], vec![4, 5, 6]]) {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        };
+
+        let matrix2 = match Matrix::<i64>::new(vec![vec![7, 8], vec![9, 10], vec![11, 12]]) {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        };
+
+        let expected_result = match Matrix::<i64>::new(vec![vec![58, 64], vec![139, 154]]) {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        };
+
+        assert_eq!(
+            matrix.matrix_multiplication(&matrix2).unwrap(),
+            expected_result
+        );
+    }
+
+    #[test]
+    fn imatrix_multiplication_large_matrix() {
+        let matrix = match Matrix::<i64>::new(vec![
+            vec![1, 2, 3, 4],
+            vec![5, 6, 7, 8],
+            vec![9, 10, 11, 12],
+            vec![13, 14, 15, 16],
+        ]) {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        };
+
+        let matrix2 = match Matrix::<i64>::new(vec![
+            vec![16, 15, 14, 13],
+            vec![12, 11, 10, 9],
+            vec![8, 7, 6, 5],
+            vec![4, 3, 2, 1],
+        ]) {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        };
+
+        let expected_result = match Matrix::<i64>::new(vec![
+            vec![80, 70, 60, 50],
+            vec![240, 214, 188, 162],
+            vec![400, 358, 316, 274],
+            vec![560, 502, 444, 386],
+        ]) {
+            Ok(m) => m,
+            Err(e) => panic!("{:?}", e),
+        };
+
+        assert_eq!(
+            matrix.matrix_multiplication(&matrix2).unwrap(),
+            expected_result
+        );
     }
 }
