@@ -1,4 +1,4 @@
-# Statistical and Vector Operations Library - Datas # Datas  ![Build Status]
+# Statistical and Vector Operations Library - Datas  ![Build Status]
 [Build Status]: https://img.shields.io/github/actions/workflow/status/kris007iron/datas/rust.yml?branch=master
 
 This Rust library provides statistical operations and vector algebra functionalities, working with both `f64` and `i64` data types. It also includes methods for calculating common statistical measures (mean, median, mode, variance, standard deviation) and operations on vectors (addition, dot product, magnitude).
