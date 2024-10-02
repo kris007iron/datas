@@ -6,8 +6,10 @@ authors = ["Krzysztof Mrugala <kris007.iron@gmail.com>"]
 readme = "README.md"
 repository = "https://github.com/kris007iron/datas"
 license = "GPL-3.0"
+license-file = "LICENSE"
 description = "A library for data structures and algorithms and data analisys"
-
+keywords = ["rust-math-library", "vector-operations", "matrix-operations", "statistical-library", "data-analysis"]
+categories = ["algorithms", "data-structures", "mathematics", "science"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
