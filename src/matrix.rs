@@ -6,7 +6,7 @@ pub enum MatrixError {
     RowOutOfBound,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Matrix<T> {
     data: Vec<Vec<T>>,
     rows: u64,
@@ -29,14 +29,6 @@ impl Matrix<i64> {
         }
 
         Ok(Self { data, rows, cols })
-    }
-
-    pub fn clone(&self) -> Matrix<i64> {
-        Matrix::<i64> {
-            data: self.data.clone(),
-            rows: self.rows.clone(),
-            cols: self.cols.clone(),
-        }
     }
 
     pub fn swap_row(&mut self, f_row: u64, s_row: u64) -> Result<(), MatrixError> {
