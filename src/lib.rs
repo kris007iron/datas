@@ -1,7 +1,9 @@
 use std::collections::HashMap;
 use std::hash::Hash;
 
+pub mod matrix;
 pub mod vector;
+
 pub struct Mean;
 
 impl Mean {

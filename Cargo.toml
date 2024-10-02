@@ -1,11 +1,11 @@
 [package]
 name = "datas"
-version = "0.1.7"
+version = "0.1.8"
 edition = "2021"
 authors = ["Krzysztof Mrugala <kris007.iron@gmail.com>"]
 readme = "README.md"
 repository = "https://github.com/kris007iron/datas"
-license = "MIT"
+license = "GPL-3.0"
 description = "A library for data structures and algorithms and data analisys"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
